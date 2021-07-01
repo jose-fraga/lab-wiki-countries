@@ -1,27 +1,18 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function CountryDetails(props) {
 
     const [country, setCountry] = useState({});
 
-    function getBorders() {
-        
-        return (
-            <Link
-                to={`/${country.cca3}`}
-            >
-            {country.name.official}
-          </Link>
-        );
-    }
-
 
     useEffect(() => {
         let currentCountry = props.data.find(eachCountry => eachCountry.cca3 === props.match.params.dynamicId)
         setCountry(currentCountry);
-    }, [props.country, props.match.params.dynamicId])
+    }, [props])
 
+    console.log(country.borders);
     return (
         <div className="col-7">
         <h1>{country.name?.common}</h1>
@@ -43,14 +34,12 @@ function CountryDetails(props) {
               <td>Borders</td>
               <td>
                 <ul>
-                  <li><a href="/AND">Andorra</a></li>
-                  <li><a href="/BEL">Belgium</a></li>
-                  <li><a href="/DEU">Germany</a></li>
-                  <li><a href="/ITA">Italy</a></li>
-                  <li><a href="/LUX">Luxembourg</a></li>
-                  <li><a href="/MCO">Monaco</a></li>
-                  <li><a href="/ESP">Spain</a></li>
-                  <li><a href="/CHE">Switzerland</a></li>
+                  {country.borders?.map(eachBorder => {
+                    let borderCountry = props.data.find(eachCountry => eachCountry.cca3 === eachBorder)
+                    return (
+                      <li> <Link to = {borderCountry.cca3}>{borderCountry.name.common}</Link></li>                  
+                    )                  
+                  }) }
                 </ul>
               </td>
             </tr>
